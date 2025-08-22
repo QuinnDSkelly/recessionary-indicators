@@ -3,12 +3,24 @@ import { YieldCurveChart } from "@/components/YieldCurveChart";
 import { HousingChart } from "@/components/HousingChart";
 import { PMIChart } from "@/components/PMIChart";
 import { MoneySupplyChart } from "@/components/MoneySupplyChart";
-import { TrendingDown, AlertTriangle } from "lucide-react";
+import { TrendingDown, AlertTriangle, ArrowRight } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
 
 const Index = () => {
   return (
     <div className="min-h-screen bg-background p-6">
       <div className="max-w-7xl mx-auto space-y-6">
+        {/* Navigation */}
+        <div className="flex items-center justify-end">
+          <Link to="/lagging">
+            <Button variant="outline" className="flex items-center space-x-2">
+              <span>Lagging Indicators</span>
+              <ArrowRight className="h-4 w-4" />
+            </Button>
+          </Link>
+        </div>
+
         {/* Header */}
         <div className="text-center space-y-3 py-8">
           <div className="flex items-center justify-center space-x-2 mb-4">
