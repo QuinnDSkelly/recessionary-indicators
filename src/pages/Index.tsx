@@ -4,7 +4,7 @@ import { HousingChart } from "@/components/HousingChart";
 import { PMIChart } from "@/components/PMIChart";
 import { MoneySupplyChart } from "@/components/MoneySupplyChart";
 import { DataSkeleton } from "@/components/LoadingSkeleton";
-import { TrendingDown, AlertTriangle, ArrowRight, RefreshCw } from "lucide-react";
+import { TrendingDown, ArrowRight, RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { useLeadingIndicators } from "@/hooks/useEconomicData";
@@ -49,27 +49,18 @@ const Index = () => {
     <div className="min-h-screen bg-background p-6">
       <div className="max-w-7xl mx-auto space-y-6">
         {/* Navigation */}
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-end">
           <Button onClick={refreshData} variant="outline" size="sm">
             <RefreshCw className="h-4 w-4 mr-2" />
             Refresh Data
           </Button>
-          <Link to="/lagging">
-            <Button variant="outline" className="flex items-center space-x-2">
-              <span>Lagging Indicators</span>
-              <ArrowRight className="h-4 w-4" />
-            </Button>
-          </Link>
         </div>
 
         {/* Header */}
         <div className="text-center space-y-3 py-8">
-          <div className="flex items-center justify-center space-x-2 mb-4">
-            <AlertTriangle className="h-8 w-8 text-warning" />
-            <h1 className="text-4xl font-bold bg-gradient-to-r from-primary to-financial-blue bg-clip-text text-transparent">
-              Leading Recessionary Indicators
-            </h1>
-          </div>
+          <h1 className="text-4xl font-bold bg-gradient-to-r from-primary to-financial-blue bg-clip-text text-transparent mb-4">
+            Leading Recessionary Indicators
+          </h1>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
             Monitor key economic indicators that historically precede economic downturns
           </p>

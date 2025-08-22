@@ -2,7 +2,7 @@ import { IndicatorCard } from "@/components/IndicatorCard";
 import { UnemploymentChart } from "@/components/UnemploymentChart";
 import { InflationChart } from "@/components/InflationChart";
 import { DataSkeleton } from "@/components/LoadingSkeleton";
-import { TrendingUp, BarChart3, ArrowLeft, RefreshCw } from "lucide-react";
+import { TrendingUp, ArrowLeft, RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { useLaggingIndicators } from "@/hooks/useEconomicData";
@@ -47,13 +47,7 @@ const LaggingIndicators = () => {
     <div className="min-h-screen bg-background p-6">
       <div className="max-w-7xl mx-auto space-y-6">
         {/* Navigation */}
-        <div className="flex items-center justify-between">
-          <Link to="/">
-            <Button variant="outline" className="flex items-center space-x-2">
-              <ArrowLeft className="h-4 w-4" />
-              <span>Leading Indicators</span>
-            </Button>
-          </Link>
+        <div className="flex items-center justify-end">
           <Button onClick={refreshData} variant="outline" size="sm">
             <RefreshCw className="h-4 w-4 mr-2" />
             Refresh Data
@@ -62,12 +56,9 @@ const LaggingIndicators = () => {
 
         {/* Header */}
         <div className="text-center space-y-3 py-8">
-          <div className="flex items-center justify-center space-x-2 mb-4">
-            <BarChart3 className="h-8 w-8 text-primary" />
-            <h1 className="text-4xl font-bold bg-gradient-to-r from-primary to-financial-blue bg-clip-text text-transparent">
-              Lagging Recessionary Indicators
-            </h1>
-          </div>
+          <h1 className="text-4xl font-bold bg-gradient-to-r from-primary to-financial-blue bg-clip-text text-transparent mb-4">
+            Lagging Recessionary Indicators
+          </h1>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
             Monitor economic indicators that confirm and reflect economic conditions after they've occurred
           </p>
@@ -118,7 +109,7 @@ const LaggingIndicators = () => {
         <div className="bg-muted/30 border border-border rounded-lg p-4">
           <p className="text-sm text-muted-foreground text-center">
             💡 <strong>Note:</strong> Lagging indicators confirm trends that leading indicators have already predicted. 
-            Compare with <Link to="/" className="text-primary hover:underline">Leading Indicators</Link> for comprehensive analysis.
+            Compare with <Link to="/leading" className="text-primary hover:underline">Leading Indicators</Link> for comprehensive analysis.
           </p>
         </div>
       </div>
