@@ -1,11 +1,48 @@
 import { IndicatorCard } from "@/components/IndicatorCard";
 import { UnemploymentChart } from "@/components/UnemploymentChart";
 import { InflationChart } from "@/components/InflationChart";
-import { TrendingUp, BarChart3, ArrowLeft } from "lucide-react";
+import { DataSkeleton } from "@/components/LoadingSkeleton";
+import { TrendingUp, BarChart3, ArrowLeft, RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
+import { useLaggingIndicators } from "@/hooks/useEconomicData";
 
 const LaggingIndicators = () => {
+  const { data, loading, error, lastUpdate, refreshData } = useLaggingIndicators();
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-background p-6">
+        <div className="max-w-7xl mx-auto space-y-6">
+          <div className="text-center space-y-3 py-8">
+            <h1 className="text-4xl font-bold">Lagging Recessionary Indicators</h1>
+            <p className="text-lg text-muted-foreground">Loading latest economic data...</p>
+          </div>
+          <DataSkeleton />
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-background p-6">
+        <div className="max-w-7xl mx-auto space-y-6">
+          <div className="text-center space-y-3 py-8">
+            <h1 className="text-4xl font-bold text-destructive">Error Loading Data</h1>
+            <p className="text-lg text-muted-foreground">{error}</p>
+            <Button onClick={refreshData} variant="outline">
+              <RefreshCw className="h-4 w-4 mr-2" />
+              Retry
+            </Button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (!data) return null;
+
   return (
     <div className="min-h-screen bg-background p-6">
       <div className="max-w-7xl mx-auto space-y-6">
@@ -17,6 +54,10 @@ const LaggingIndicators = () => {
               <span>Leading Indicators</span>
             </Button>
           </Link>
+          <Button onClick={refreshData} variant="outline" size="sm">
+            <RefreshCw className="h-4 w-4 mr-2" />
+            Refresh Data
+          </Button>
         </div>
 
         {/* Header */}
@@ -31,7 +72,7 @@ const LaggingIndicators = () => {
             Monitor economic indicators that confirm and reflect economic conditions after they've occurred
           </p>
           <div className="text-sm text-muted-foreground">
-            Last updated: {new Date().toLocaleDateString()} • Data as of June 2024
+            Last updated: {lastUpdate}
           </div>
         </div>
 
@@ -39,22 +80,22 @@ const LaggingIndicators = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <IndicatorCard
             title="Unemployment Rate"
-            value="4.0%"
-            change={0.3}
-            trend="up"
+            value={`${data.unemployment.indicator.value.toFixed(1)}%`}
+            change={data.unemployment.indicator.change}
+            trend={data.unemployment.indicator.trend}
             subtitle="Non-Farm Payrolls (Seasonally Adjusted)"
           >
-            <UnemploymentChart />
+            <UnemploymentChart data={data.unemployment.timeSeriesData} />
           </IndicatorCard>
 
           <IndicatorCard
             title="Inflation Rate (CPI)"
-            value="3.0%"
-            change={-0.4}
-            trend="down"
+            value={`${data.inflation.indicator.value.toFixed(1)}%`}
+            change={data.inflation.indicator.change}
+            trend={data.inflation.indicator.trend}
             subtitle="Year-over-Year Consumer Price Index"
           >
-            <InflationChart />
+            <InflationChart data={data.inflation.timeSeriesData} />
           </IndicatorCard>
         </div>
 
@@ -65,9 +106,9 @@ const LaggingIndicators = () => {
             <div>
               <h3 className="font-semibold text-foreground mb-2">Lagging Indicator Analysis</h3>
               <p className="text-sm text-muted-foreground leading-relaxed">
-                Unemployment has risen modestly to 4.0%, which typically confirms economic weakness after it has begun. 
-                Inflation continues to moderate from previous highs but remains above the Federal Reserve's 2% target. 
-                These lagging indicators help confirm the economic trends identified by leading indicators.
+                Unemployment remains stable at {data.unemployment.indicator.value.toFixed(1)}%, reflecting a still-resilient labor market. 
+                Inflation has moderated to {data.inflation.indicator.value.toFixed(1)}%, approaching the Federal Reserve's 2% target but still elevated. 
+                These lagging indicators suggest the economy is showing mixed signals, with employment strength offsetting inflationary pressures.
               </p>
             </div>
           </div>

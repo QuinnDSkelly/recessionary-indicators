@@ -1,20 +1,15 @@
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer } from 'recharts';
+import { YieldCurveData } from '@/services/economicDataService';
 
-const yieldData = [
-  { maturity: '3M', yield: 5.1 },
-  { maturity: '6M', yield: 4.9 },
-  { maturity: '1Y', yield: 4.7 },
-  { maturity: '2Y', yield: 4.4 },
-  { maturity: '5Y', yield: 4.1 },
-  { maturity: '10Y', yield: 4.2 },
-  { maturity: '30Y', yield: 4.4 }
-];
+interface YieldCurveChartProps {
+  data: YieldCurveData[];
+}
 
-export const YieldCurveChart = () => {
+export const YieldCurveChart = ({ data }: YieldCurveChartProps) => {
   return (
     <div className="h-32">
       <ResponsiveContainer width="100%" height="100%">
-        <LineChart data={yieldData} margin={{ top: 5, right: 5, left: 5, bottom: 5 }}>
+        <LineChart data={data} margin={{ top: 5, right: 5, left: 5, bottom: 5 }}>
           <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" opacity={0.3} />
           <XAxis 
             dataKey="maturity" 
