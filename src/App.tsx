@@ -17,10 +17,20 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarTrigger,
+  useSidebar,
 } from "@/components/ui/sidebar";
 import { Timer, LineChart, BarChart3 } from "lucide-react";
 
 const queryClient = new QueryClient();
+
+function SidebarTriggerButton() {
+  const { open } = useSidebar();
+  return (
+    <div className={`fixed top-3 z-50 transition-all duration-300 ${open ? 'left-[260px]' : 'left-3'}`}>
+      <SidebarTrigger className="h-11 w-11 rounded-full bg-primary text-primary-foreground shadow-lg hover:shadow-xl hover:bg-primary/90 border border-primary/30" />
+    </div>
+  );
+}
 
 function NavSidebar() {
   const { pathname } = useLocation();
@@ -58,10 +68,8 @@ function NavSidebar() {
         </SidebarContent>
       </Sidebar>
       <SidebarInset>
+        <SidebarTriggerButton />
         <div className="p-0">
-          <div className="fixed top-3 left-3 z-50">
-            <SidebarTrigger className="h-11 w-11 rounded-full bg-primary text-primary-foreground shadow-lg hover:shadow-xl hover:bg-primary/90 border border-primary/30" />
-          </div>
           <Routes>
             <Route path="/" element={<FedCountdown />} />
             <Route path="/leading" element={<Index />} />
