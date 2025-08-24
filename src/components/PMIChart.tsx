@@ -14,12 +14,12 @@ export const PMIChart = ({ data }: PMIChartProps) => {
     return { ...item, trend: avgValue };
   });
 
-  // Dynamic domain based on data range with tighter focus around critical levels
+  // PMI data should be in the 45-55 range with 50 as the critical threshold
   const values = data.map(d => d.value).filter(v => !isNaN(v));
   const minValue = Math.min(...values);
   const maxValue = Math.max(...values);
   
-  // Set focused range around PMI critical levels (45-55 typical range)
+  // Set focused range around PMI critical levels
   const domainMin = Math.min(45, minValue - 1);
   const domainMax = Math.max(55, maxValue + 1);
 

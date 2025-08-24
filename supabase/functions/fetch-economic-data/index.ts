@@ -37,7 +37,7 @@ serve(async (req) => {
     const seriesMap: Record<string, string> = {
       'treasury-spread': 'T10Y2Y', // 10-Year Treasury Constant Maturity Minus 2-Year Treasury Constant Maturity
       'housing-starts': 'HOUST', // Housing Starts: Total: New Privately Owned Housing Units Started
-      'pmi': 'MANEMP', // All Employees: Manufacturing
+      'pmi': 'NAPM', // ISM Manufacturing PMI
       'money-supply': 'M2SL', // M2 Money Supply
       'unemployment': 'UNRATE', // Unemployment Rate
       'inflation': 'CPIAUCSL', // Consumer Price Index for All Urban Consumers: All Items
