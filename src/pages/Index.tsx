@@ -113,6 +113,9 @@ const Index = () => {
             change={data.moneySupply.indicator.change}
             trend={data.moneySupply.indicator.trend}
             subtitle="Total Money Supply"
+            momChange={data.moneySupply.indicator.momChange}
+            yoyChange={data.moneySupply.indicator.yoyChange}
+            showDualMetrics={true}
           >
             <MoneySupplyChart data={data.moneySupply.timeSeriesData} />
           </IndicatorCard>

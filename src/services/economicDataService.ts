@@ -263,6 +263,9 @@ class EconomicDataService {
       const latest = data[data.length - 1];
       const previous = data[data.length - 2];
       
+      // Calculate MoM percentage change
+      const momChange = previous ? ((latest.value - previous.value) / previous.value) * 100 : 0.2;
+      
       // Calculate YoY percentage change for M2 money supply
       let yoyChange = 0;
       if (data.length >= 12) {
@@ -270,13 +273,15 @@ class EconomicDataService {
         yoyChange = ((latest.value - yearAgo.value) / yearAgo.value) * 100;
       } else if (previous) {
         // Fallback to month-over-month percentage if we don't have 12 months
-        yoyChange = ((latest.value - previous.value) / previous.value) * 100;
+        yoyChange = momChange;
       }
 
       return {
         indicator: {
           value: latest?.value || 3.9,
-          change: yoyChange,
+          change: yoyChange, // Keep YoY as primary change for display
+          momChange,
+          yoyChange,
           date: latest?.date || '2025-01-31',
           trend: yoyChange > 0 ? 'up' : yoyChange < 0 ? 'down' : 'neutral'
         },
@@ -291,6 +296,8 @@ class EconomicDataService {
         indicator: {
           value: 3.9,
           change: 2.5, // Realistic YoY M2 growth rate
+          momChange: 0.2, // Realistic MoM M2 growth rate
+          yoyChange: 2.5,
           date: '2025-01-31',
           trend: 'up'
         },
