@@ -14,12 +14,14 @@ export const PMIChart = ({ data }: PMIChartProps) => {
     return { ...item, trend: avgValue };
   });
 
-  // Dynamic domain based on data range
+  // Dynamic domain based on data range with tighter focus around critical levels
   const values = data.map(d => d.value).filter(v => !isNaN(v));
-  const minValue = Math.min(...values, 50);
-  const maxValue = Math.max(...values, 50);
-  const range = maxValue - minValue;
-  const padding = Math.max(range * 0.1, 2);
+  const minValue = Math.min(...values);
+  const maxValue = Math.max(...values);
+  
+  // Set focused range around PMI critical levels (45-55 typical range)
+  const domainMin = Math.min(45, minValue - 1);
+  const domainMax = Math.max(55, maxValue + 1);
 
   return (
     <div className="h-40">
@@ -36,7 +38,8 @@ export const PMIChart = ({ data }: PMIChartProps) => {
             tick={{ fontSize: 11, fill: 'hsl(var(--muted-foreground))' }}
             axisLine={false}
             tickLine={false}
-            domain={[minValue - padding, maxValue + padding]}
+            domain={[domainMin, domainMax]}
+            ticks={[45, 47, 49, 50, 51, 53, 55]}
             tickFormatter={(value) => `${value.toFixed(0)}`}
           />
           <Tooltip 
