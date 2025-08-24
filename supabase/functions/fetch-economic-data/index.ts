@@ -24,7 +24,10 @@ serve(async (req) => {
     const { indicator } = await req.json();
     const fredApiKey = Deno.env.get('FRED_API_KEY');
     
+    console.log(`Environment check - FRED_API_KEY exists: ${!!fredApiKey}`);
+    
     if (!fredApiKey) {
+      console.error('FRED_API_KEY environment variable not found');
       throw new Error('FRED API key not configured');
     }
 
