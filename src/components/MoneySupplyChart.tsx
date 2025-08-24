@@ -6,12 +6,29 @@ interface MoneySupplyChartProps {
 }
 
 export const MoneySupplyChart = ({ data }: MoneySupplyChartProps) => {
-  // Calculate percentage change from previous period
-  const changeData = data.map((item, index) => {
-    if (index === 0) return { ...item, change: 0 };
-    const prevValue = data[index - 1].value;
-    const change = ((item.value - prevValue) / prevValue) * 100;
-    return { ...item, change };
+  // Calculate percentage change from previous period and year-over-year
+  const enhancedData = data.map((item, index) => {
+    let monthChange = 0;
+    let yearChange = 0;
+    
+    // Month-over-month change
+    if (index > 0) {
+      const prevValue = data[index - 1].value;
+      monthChange = ((item.value - prevValue) / prevValue) * 100;
+    }
+    
+    // Year-over-year change (if we have 12+ data points)
+    if (index >= 12) {
+      const yearAgoValue = data[index - 12].value;
+      yearChange = ((item.value - yearAgoValue) / yearAgoValue) * 100;
+    }
+    
+    return { 
+      ...item, 
+      monthChange,
+      yearChange,
+      trillions: item.value / 1000 // Convert to trillions for easier reading
+    };
   });
 
   // Calculate dynamic domain for better trend visibility
@@ -24,7 +41,7 @@ export const MoneySupplyChart = ({ data }: MoneySupplyChartProps) => {
   return (
     <div className="h-40">
       <ResponsiveContainer width="100%" height="100%">
-        <ComposedChart data={changeData} margin={{ top: 10, right: 15, left: 15, bottom: 10 }}>
+        <ComposedChart data={enhancedData} margin={{ top: 10, right: 15, left: 15, bottom: 10 }}>
           <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" opacity={0.4} />
           <XAxis 
             dataKey="month" 
@@ -40,12 +57,16 @@ export const MoneySupplyChart = ({ data }: MoneySupplyChartProps) => {
             tickFormatter={(value) => `$${(value / 1000).toFixed(1)}T`}
           />
           <Tooltip 
-            formatter={(value: number, name: string) => [
-              name === 'value' 
-                ? `$${(value / 1000).toFixed(2)} Trillion` 
-                : `${value > 0 ? '+' : ''}${value.toFixed(2)}%`,
-              name === 'value' ? 'M2 Money Supply' : 'Change from Previous'
-            ]}
+            formatter={(value: number, name: string) => {
+              if (name === 'value') {
+                return [`$${(value / 1000).toFixed(2)} Trillion`, 'M2 Money Supply'];
+              } else if (name === 'monthChange') {
+                return [`${value > 0 ? '+' : ''}${value.toFixed(2)}%`, 'Monthly Change'];
+              } else if (name === 'yearChange') {
+                return [`${value > 0 ? '+' : ''}${value.toFixed(1)}%`, 'Annual Change'];
+              }
+              return [value, name];
+            }}
             labelFormatter={(label) => `${label}`}
             contentStyle={{
               backgroundColor: 'hsl(var(--background))',
