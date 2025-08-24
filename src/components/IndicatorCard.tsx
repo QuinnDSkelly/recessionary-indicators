@@ -8,6 +8,9 @@ interface IndicatorCardProps {
   trend: "up" | "down" | "neutral";
   subtitle?: string;
   children?: React.ReactNode;
+  momChange?: number;
+  yoyChange?: number;
+  showDualMetrics?: boolean;
 }
 
 export const IndicatorCard = ({ 
@@ -16,7 +19,10 @@ export const IndicatorCard = ({
   change, 
   trend, 
   subtitle,
-  children 
+  children,
+  momChange,
+  yoyChange,
+  showDualMetrics = false
 }: IndicatorCardProps) => {
   const getTrendIcon = () => {
     switch (trend) {
@@ -55,9 +61,20 @@ export const IndicatorCard = ({
           </div>
           <div className="flex items-center space-x-1">
             {getTrendIcon()}
-            <span className={`text-sm font-medium ${getTrendColor()}`}>
-              {change > 0 ? '+' : ''}{change.toFixed(2)}%
-            </span>
+            {showDualMetrics && momChange !== undefined && yoyChange !== undefined ? (
+              <div className="text-sm font-medium space-y-0.5">
+                <div className={getTrendColor()}>
+                  MoM: {momChange > 0 ? '+' : ''}{momChange.toFixed(1)}{title.includes('PMI') ? '' : '%'}
+                </div>
+                <div className={getTrendColor()}>
+                  YoY: {yoyChange > 0 ? '+' : ''}{yoyChange.toFixed(1)}{title.includes('PMI') ? '' : '%'}
+                </div>
+              </div>
+            ) : (
+              <span className={`text-sm font-medium ${getTrendColor()}`}>
+                {change > 0 ? '+' : ''}{change.toFixed(2)}%
+              </span>
+            )}
           </div>
         </div>
       </CardHeader>

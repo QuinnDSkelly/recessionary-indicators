@@ -87,6 +87,9 @@ const Index = () => {
             change={data.housingStarts.indicator.change}
             trend={data.housingStarts.indicator.trend}
             subtitle="Annual Rate (SAAR)"
+            momChange={data.housingStarts.indicator.momChange}
+            yoyChange={data.housingStarts.indicator.yoyChange}
+            showDualMetrics={true}
           >
             <HousingChart data={data.housingStarts.timeSeriesData} />
           </IndicatorCard>
@@ -97,6 +100,9 @@ const Index = () => {
             change={data.pmi.indicator.change}
             trend={data.pmi.indicator.trend}
             subtitle="Manufacturing PMI (Below 50 = Contraction)"
+            momChange={data.pmi.indicator.momChange}
+            yoyChange={data.pmi.indicator.yoyChange}
+            showDualMetrics={true}
           >
             <PMIChart data={data.pmi.timeSeriesData} />
           </IndicatorCard>
