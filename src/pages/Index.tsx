@@ -76,7 +76,7 @@ const Index = () => {
             value={data.treasurySpread.value > 0 ? "Normal" : "Inverted"}
             change={data.treasurySpread.change}
             trend={data.treasurySpread.trend}
-            subtitle={`10Y-2Y Spread: ${data.treasurySpread.value > 0 ? '+' : ''}${(data.treasurySpread.value * 100).toFixed(0)} bps`}
+            subtitle={`3M-30Y Spread: ${data.treasurySpread.value > 0 ? '+' : ''}${(data.treasurySpread.value * 100).toFixed(0)} bps`}
           >
             <YieldCurveChart data={data.yieldCurve} />
           </IndicatorCard>
