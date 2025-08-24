@@ -75,9 +75,6 @@ const LaggingIndicators = () => {
             change={data.unemployment.indicator.change}
             trend={data.unemployment.indicator.trend}
             subtitle="Non-Farm Payrolls (Seasonally Adjusted)"
-            momChange={data.unemployment.indicator.momChange}
-            yoyChange={data.unemployment.indicator.yoyChange}
-            showDualMetrics={true}
           >
             <UnemploymentChart data={data.unemployment.timeSeriesData} />
           </IndicatorCard>
@@ -87,10 +84,7 @@ const LaggingIndicators = () => {
             value={`${data.inflation.indicator.value.toFixed(1)}%`}
             change={data.inflation.indicator.change}
             trend={data.inflation.indicator.trend}
-            subtitle="Year-over-Year Consumer Price Index"
-            momChange={data.inflation.indicator.momChange}
-            yoyChange={data.inflation.indicator.yoyChange}
-            showDualMetrics={true}
+            subtitle="Consumer Price Index for All Urban Consumers"
           >
             <InflationChart data={data.inflation.timeSeriesData} />
           </IndicatorCard>
