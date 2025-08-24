@@ -46,23 +46,41 @@ class EconomicDataService {
   private getMockData(indicator: string): any {
     // Fallback mock data in case FRED API fails
     const mockTimeSeriesData = [
-      { month: 'Jul', value: 1.2 },
-      { month: 'Aug', value: 1.5 },
-      { month: 'Sep', value: 1.8 },
-      { month: 'Oct', value: 2.1 },
-      { month: 'Nov', value: 2.3 },
-      { month: 'Dec', value: 2.5 },
+      { month: 'Jul', value: 21500, date: '2024-07-01' },
+      { month: 'Aug', value: 21520, date: '2024-08-01' },
+      { month: 'Sep', value: 21540, date: '2024-09-01' },
+      { month: 'Oct', value: 21560, date: '2024-10-01' },
+      { month: 'Nov', value: 21580, date: '2024-11-01' },
+      { month: 'Dec', value: 21600, date: '2024-12-01' },
+    ];
+
+    const pmiMockData = [
+      { month: 'Jul', value: 46.8, date: '2024-07-01' },
+      { month: 'Aug', value: 47.2, date: '2024-08-01' },
+      { month: 'Sep', value: 47.9, date: '2024-09-01' },
+      { month: 'Oct', value: 48.1, date: '2024-10-01' },
+      { month: 'Nov', value: 48.4, date: '2024-11-01' },
+      { month: 'Dec', value: 49.3, date: '2024-12-01' },
     ];
 
     switch (indicator) {
       case 'treasury-spread':
         return [{ date: new Date().toISOString(), value: 0.5 }];
-      case 'housing-starts':
       case 'pmi':
+        return pmiMockData;
       case 'money-supply':
+        return mockTimeSeriesData;
+      case 'housing-starts':
       case 'unemployment':
       case 'inflation':
-        return mockTimeSeriesData;
+        return [
+          { month: 'Jul', value: 1.2, date: '2024-07-01' },
+          { month: 'Aug', value: 1.5, date: '2024-08-01' },
+          { month: 'Sep', value: 1.8, date: '2024-09-01' },
+          { month: 'Oct', value: 2.1, date: '2024-10-01' },
+          { month: 'Nov', value: 2.3, date: '2024-11-01' },
+          { month: 'Dec', value: 2.5, date: '2024-12-01' },
+        ];
       default:
         return mockTimeSeriesData;
     }
@@ -238,17 +256,17 @@ class EconomicDataService {
       return {
         indicator: {
           value: 3.9,
-          change: 0.1,
+          change: 2.5, // Realistic YoY M2 growth rate
           date: '2025-01-31',
           trend: 'up'
         },
         timeSeriesData: [
-          { month: 'Jul', value: 2.8 },
-          { month: 'Aug', value: 3.1 },
-          { month: 'Sep', value: 3.4 },
-          { month: 'Oct', value: 3.6 },
-          { month: 'Nov', value: 3.8 },
-          { month: 'Dec', value: 3.9 }
+          { month: 'Jul', value: 21500 },
+          { month: 'Aug', value: 21520 },
+          { month: 'Sep', value: 21540 },
+          { month: 'Oct', value: 21560 },
+          { month: 'Nov', value: 21580 },
+          { month: 'Dec', value: 21600 }
         ]
       };
     }
