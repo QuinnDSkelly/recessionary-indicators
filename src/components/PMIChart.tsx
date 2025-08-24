@@ -14,12 +14,14 @@ export const PMIChart = ({ data }: PMIChartProps) => {
     return { ...item, trend: avgValue };
   });
 
-  // Dynamic domain based on actual data values
+  // PMI index values should be around 45-55 range with 50 as expansion/contraction threshold
   const values = data.map(d => d.value).filter(v => !isNaN(v));
   const minValue = Math.min(...values);
   const maxValue = Math.max(...values);
-  const range = maxValue - minValue;
-  const padding = Math.max(range * 0.1, 1);
+  
+  // Use appropriate PMI range (typically 40-60) but adjust based on actual data
+  const domainMin = Math.min(40, minValue - 2);
+  const domainMax = Math.max(60, maxValue + 2);
 
   return (
     <div className="h-40">
@@ -36,13 +38,13 @@ export const PMIChart = ({ data }: PMIChartProps) => {
             tick={{ fontSize: 11, fill: 'hsl(var(--muted-foreground))' }}
             axisLine={false}
             tickLine={false}
-            domain={[minValue - padding, maxValue + padding]}
-            tickFormatter={(value) => `${value.toFixed(1)}`}
+            domain={[domainMin, domainMax]}
+            tickFormatter={(value) => `${value.toFixed(0)}`}
           />
           <Tooltip 
             formatter={(value: number, name: string) => [
-              `${value.toFixed(2)}`,
-              name === 'value' ? 'PMI Index' : 'Trend'
+              `${value.toFixed(1)}`,
+              name === 'value' ? 'ISM Manufacturing PMI' : 'Trend'
             ]}
             labelFormatter={(label) => `${label}`}
             contentStyle={{
@@ -52,7 +54,14 @@ export const PMIChart = ({ data }: PMIChartProps) => {
               fontSize: '12px'
             }}
           />
-          {/* Remove the 50 reference line since we don't know the scale yet */}
+          {/* 50 line indicates expansion/contraction threshold for PMI */}
+          <ReferenceLine 
+            y={50} 
+            stroke="hsl(var(--warning))" 
+            strokeDasharray="4 4" 
+            strokeWidth={2}
+            label={{ value: "Expansion/Contraction", position: "insideTopRight", fontSize: 10 }}
+          />
           <Bar 
             dataKey="value" 
             fill="hsl(var(--financial-blue))"
