@@ -210,13 +210,23 @@ class EconomicDataService {
       const data = await this.fetchFromFred('money-supply');
       const latest = data[data.length - 1];
       const previous = data[data.length - 2];
+      
+      // Calculate YoY percentage change for M2 money supply
+      let yoyChange = 0;
+      if (data.length >= 12) {
+        const yearAgo = data[data.length - 12];
+        yoyChange = ((latest.value - yearAgo.value) / yearAgo.value) * 100;
+      } else if (previous) {
+        // Fallback to month-over-month percentage if we don't have 12 months
+        yoyChange = ((latest.value - previous.value) / previous.value) * 100;
+      }
 
       return {
         indicator: {
           value: latest?.value || 3.9,
-          change: previous ? (latest.value - previous.value) : 0.1,
+          change: yoyChange,
           date: latest?.date || '2025-01-31',
-          trend: previous ? (latest.value > previous.value ? 'up' : latest.value < previous.value ? 'down' : 'neutral') : 'up'
+          trend: yoyChange > 0 ? 'up' : yoyChange < 0 ? 'down' : 'neutral'
         },
         timeSeriesData: data.map((item: any) => ({
           month: item.month,
