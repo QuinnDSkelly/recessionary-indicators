@@ -14,14 +14,12 @@ export const PMIChart = ({ data }: PMIChartProps) => {
     return { ...item, trend: avgValue };
   });
 
-  // PMI data should be in the 45-55 range with 50 as the critical threshold
+  // Dynamic domain based on actual data values
   const values = data.map(d => d.value).filter(v => !isNaN(v));
   const minValue = Math.min(...values);
   const maxValue = Math.max(...values);
-  
-  // Set focused range around PMI critical levels
-  const domainMin = Math.min(45, minValue - 1);
-  const domainMax = Math.max(55, maxValue + 1);
+  const range = maxValue - minValue;
+  const padding = Math.max(range * 0.1, 1);
 
   return (
     <div className="h-40">
@@ -38,14 +36,13 @@ export const PMIChart = ({ data }: PMIChartProps) => {
             tick={{ fontSize: 11, fill: 'hsl(var(--muted-foreground))' }}
             axisLine={false}
             tickLine={false}
-            domain={[domainMin, domainMax]}
-            ticks={[45, 47, 49, 50, 51, 53, 55]}
-            tickFormatter={(value) => `${value.toFixed(0)}`}
+            domain={[minValue - padding, maxValue + padding]}
+            tickFormatter={(value) => `${value.toFixed(1)}`}
           />
           <Tooltip 
             formatter={(value: number, name: string) => [
-              `${value.toFixed(1)}`,
-              name === 'value' ? 'PMI' : 'Trend'
+              `${value.toFixed(2)}`,
+              name === 'value' ? 'PMI Index' : 'Trend'
             ]}
             labelFormatter={(label) => `${label}`}
             contentStyle={{
@@ -55,14 +52,7 @@ export const PMIChart = ({ data }: PMIChartProps) => {
               fontSize: '12px'
             }}
           />
-          {/* 50 line indicates expansion/contraction threshold */}
-          <ReferenceLine 
-            y={50} 
-            stroke="hsl(var(--warning))" 
-            strokeDasharray="4 4" 
-            strokeWidth={2}
-            label={{ value: "Expansion/Contraction", position: "insideTopRight", fontSize: 10 }}
-          />
+          {/* Remove the 50 reference line since we don't know the scale yet */}
           <Bar 
             dataKey="value" 
             fill="hsl(var(--financial-blue))"
