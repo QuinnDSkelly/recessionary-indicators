@@ -1,96 +1,125 @@
-import { useEffect, useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import { fetchNextPowellRemarks } from "@/services/fedScheduleService";
-
-type TimeLeft = {
-  days: number;
-  hours: number;
-  minutes: number;
-  seconds: number;
-};
-
-// Fallback date if the live fetch fails
-const FALLBACK_EVENT_ISO = "2025-09-18T14:00:00-04:00"; // Example placeholder date/time (ET)
-
-const getTimeLeft = (target: Date): TimeLeft => {
-  const now = new Date();
-  const diffMs = Math.max(0, target.getTime() - now.getTime());
-
-  const days = Math.floor(diffMs / (1000 * 60 * 60 * 24));
-  const hours = Math.floor((diffMs % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-  const minutes = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
-  const seconds = Math.floor((diffMs % (1000 * 60)) / 1000);
-
-  return { days, hours, minutes, seconds };
-};
+import { TrendingUp, TrendingDown, BarChart3, AlertTriangle } from "lucide-react";
 
 const FedCountdown = () => {
-  const [targetIso, setTargetIso] = useState<string>(FALLBACK_EVENT_ISO);
-  const targetDate = useMemo(() => new Date(targetIso), [targetIso]);
-  const [timeLeft, setTimeLeft] = useState<TimeLeft>(() => getTimeLeft(new Date(targetIso)));
-
-  useEffect(() => {
-    const interval = setInterval(() => setTimeLeft(getTimeLeft(targetDate)), 1000);
-    return () => clearInterval(interval);
-  }, [targetDate]);
-
-  useEffect(() => {
-    let mounted = true;
-    (async () => {
-      try {
-        const evt = await fetchNextPowellRemarks();
-        if (mounted && evt?.dateTimeISO) {
-          setTargetIso(evt.dateTimeISO);
-        }
-      } catch {
-        // keep fallback
-      }
-    })();
-    return () => {
-      mounted = false;
-    };
-  }, []);
-
-  const isElapsed =
-    timeLeft.days === 0 && timeLeft.hours === 0 && timeLeft.minutes === 0 && timeLeft.seconds === 0;
-
   return (
-    <div className="min-h-screen bg-background p-6">
-      <div className="max-w-3xl mx-auto text-center space-y-8 py-16">
-        <h1 className="text-4xl font-bold bg-gradient-to-r from-primary to-financial-blue bg-clip-text text-transparent">
-          Countdown to the Next Fed Chair Remarks
+    <div className="min-h-screen bg-background">
+      {/* Hero Section */}
+      <div className="max-w-4xl mx-auto px-6 py-16 text-center space-y-8">
+        <h1 className="text-5xl font-bold bg-gradient-to-r from-primary to-financial-blue bg-clip-text text-transparent">
+          Recession Indicators Dashboard
         </h1>
-        <p className="text-muted-foreground">Jerome Powell's next scheduled public remarks</p>
-
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-          {[
-            { label: "Days", value: timeLeft.days },
-            { label: "Hours", value: timeLeft.hours },
-            { label: "Minutes", value: timeLeft.minutes },
-            { label: "Seconds", value: timeLeft.seconds },
-          ].map((item) => (
-            <div key={item.label} className="rounded-xl border bg-card p-6">
-              <div className="text-4xl font-bold">{String(item.value).padStart(2, "0")}</div>
-              <div className="text-sm text-muted-foreground mt-1">{item.label}</div>
-            </div>
-          ))}
-        </div>
-
-        {isElapsed && (
-          <div className="text-sm text-muted-foreground">Event time reached. Check official channels for the livestream.</div>
-        )}
-
-        <div className="flex items-center justify-center gap-3 pt-6">
+        <p className="text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+          Monitor key economic indicators to track potential recession signals. 
+          Get real-time data from the Federal Reserve Economic Data (FRED) database.
+        </p>
+        
+        {/* CTA Buttons */}
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-6">
           <Link to="/leading">
-            <Button variant="outline">View Leading Indicators</Button>
+            <Button size="lg" className="w-full sm:w-auto">
+              <TrendingUp className="mr-2 h-5 w-5" />
+              View Leading Indicators
+            </Button>
           </Link>
           <Link to="/lagging">
-            <Button variant="outline">View Lagging Indicators</Button>
+            <Button variant="outline" size="lg" className="w-full sm:w-auto">
+              <TrendingDown className="mr-2 h-5 w-5" />
+              View Lagging Indicators
+            </Button>
           </Link>
         </div>
+      </div>
 
-        {/* Removed placeholder disclaimer */}
+      {/* Features Section */}
+      <div className="bg-muted/30 py-16">
+        <div className="max-w-6xl mx-auto px-6">
+          <h2 className="text-3xl font-bold text-center mb-12">Track Key Economic Indicators</h2>
+          
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {/* Leading Indicators */}
+            <div className="bg-card rounded-xl p-6 border">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="p-2 bg-financial-green/10 rounded-lg">
+                  <TrendingUp className="h-6 w-6 text-financial-green" />
+                </div>
+                <h3 className="font-semibold">Leading Indicators</h3>
+              </div>
+              <ul className="space-y-2 text-sm text-muted-foreground">
+                <li>• Yield Curve Analysis</li>
+                <li>• Treasury Spreads</li>
+                <li>• Housing Starts</li>
+                <li>• PMI Index</li>
+                <li>• Money Supply</li>
+              </ul>
+            </div>
+
+            {/* Lagging Indicators */}
+            <div className="bg-card rounded-xl p-6 border">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="p-2 bg-financial-red/10 rounded-lg">
+                  <TrendingDown className="h-6 w-6 text-financial-red" />
+                </div>
+                <h3 className="font-semibold">Lagging Indicators</h3>
+              </div>
+              <ul className="space-y-2 text-sm text-muted-foreground">
+                <li>• Unemployment Rate</li>
+                <li>• Inflation Metrics</li>
+                <li>• Consumer Price Index</li>
+                <li>• Employment Data</li>
+              </ul>
+            </div>
+
+            {/* Real-time Data */}
+            <div className="bg-card rounded-xl p-6 border">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="p-2 bg-financial-blue/10 rounded-lg">
+                  <BarChart3 className="h-6 w-6 text-financial-blue" />
+                </div>
+                <h3 className="font-semibold">Real-time Data</h3>
+              </div>
+              <ul className="space-y-2 text-sm text-muted-foreground">
+                <li>• FRED API Integration</li>
+                <li>• Live Market Data</li>
+                <li>• Historical Trends</li>
+                <li>• Interactive Charts</li>
+              </ul>
+            </div>
+
+            {/* Early Warning */}
+            <div className="bg-card rounded-xl p-6 border">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="p-2 bg-warning/10 rounded-lg">
+                  <AlertTriangle className="h-6 w-6 text-warning" />
+                </div>
+                <h3 className="font-semibold">Early Warning</h3>
+              </div>
+              <ul className="space-y-2 text-sm text-muted-foreground">
+                <li>• Recession Signals</li>
+                <li>• Economic Trends</li>
+                <li>• Market Analysis</li>
+                <li>• Risk Assessment</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* About Section */}
+      <div className="py-16">
+        <div className="max-w-4xl mx-auto px-6 text-center space-y-6">
+          <h2 className="text-3xl font-bold">Understanding Economic Indicators</h2>
+          <p className="text-muted-foreground leading-relaxed">
+            Economic indicators are statistical metrics that help economists, investors, and policymakers 
+            assess the health of an economy. Leading indicators predict future economic activity, while 
+            lagging indicators confirm trends that have already occurred.
+          </p>
+          <p className="text-muted-foreground leading-relaxed">
+            This dashboard provides real-time access to key indicators sourced from the Federal Reserve 
+            Economic Data (FRED) to help you stay informed about potential economic shifts.
+          </p>
+        </div>
       </div>
     </div>
   );
