@@ -44,7 +44,7 @@ function NavSidebar() {
               <SidebarMenuButton asChild isActive={pathname === "/"}>
                 <Link to="/">
                   <Timer />
-                  <span>Countdown</span>
+                  <span>About</span>
                 </Link>
               </SidebarMenuButton>
             </SidebarMenuItem>
