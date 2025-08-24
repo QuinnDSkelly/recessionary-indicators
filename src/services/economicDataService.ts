@@ -321,13 +321,27 @@ class EconomicDataService {
       const data = await this.fetchFromFred('unemployment');
       const latest = data[data.length - 1];
       const previous = data[data.length - 2];
+      
+      // Calculate MoM percentage change
+      const momChange = previous ? ((latest.value - previous.value) / previous.value) * 100 : 0.0;
+      
+      // Calculate YoY percentage change
+      let yoyChange = 0;
+      if (data.length >= 12) {
+        const yearAgo = data[data.length - 12];
+        yoyChange = ((latest.value - yearAgo.value) / yearAgo.value) * 100;
+      } else {
+        yoyChange = momChange; // Fallback to MoM if we don't have 12 months
+      }
 
       return {
         indicator: {
           value: latest?.value || 4.1,
-          change: previous ? (latest.value - previous.value) : 0.0,
+          change: momChange, // Keep MoM as primary change for display
+          momChange,
+          yoyChange,
           date: latest?.date || '2024-12-31',
-          trend: previous ? (latest.value > previous.value ? 'up' : latest.value < previous.value ? 'down' : 'neutral') : 'neutral'
+          trend: momChange > 0 ? 'up' : momChange < 0 ? 'down' : 'neutral'
         },
         timeSeriesData: data.map((item: any) => ({
           month: item.month,
@@ -340,6 +354,8 @@ class EconomicDataService {
         indicator: {
           value: 4.1,
           change: 0.0,
+          momChange: 0.0,
+          yoyChange: -2.4,
           date: '2024-12-31',
           trend: 'neutral'
         },
@@ -363,13 +379,27 @@ class EconomicDataService {
       const data = await this.fetchFromFred('inflation');
       const latest = data[data.length - 1];
       const previous = data[data.length - 2];
+      
+      // Calculate MoM percentage change
+      const momChange = previous ? ((latest.value - previous.value) / previous.value) * 100 : -3.4;
+      
+      // Calculate YoY percentage change
+      let yoyChange = 0;
+      if (data.length >= 12) {
+        const yearAgo = data[data.length - 12];
+        yoyChange = ((latest.value - yearAgo.value) / yearAgo.value) * 100;
+      } else {
+        yoyChange = momChange; // Fallback to MoM if we don't have 12 months
+      }
 
       return {
         indicator: {
           value: latest?.value || 2.9,
-          change: previous ? (latest.value - previous.value) : -0.1,
+          change: momChange, // Keep MoM as primary change for display
+          momChange,
+          yoyChange,
           date: latest?.date || '2024-12-31',
-          trend: previous ? (latest.value > previous.value ? 'up' : latest.value < previous.value ? 'down' : 'neutral') : 'down'
+          trend: momChange > 0 ? 'up' : momChange < 0 ? 'down' : 'neutral'
         },
         timeSeriesData: data.map((item: any) => ({
           month: item.month,
@@ -381,7 +411,9 @@ class EconomicDataService {
       return {
         indicator: {
           value: 2.9,
-          change: -0.1,
+          change: -3.4,
+          momChange: -3.4,
+          yoyChange: 13.8,
           date: '2024-12-31',
           trend: 'down'
         },
