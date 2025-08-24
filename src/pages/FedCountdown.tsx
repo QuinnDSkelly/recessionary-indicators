@@ -81,7 +81,6 @@ const FedCountdown = () => {
               </div>
               <ul className="space-y-2 text-sm text-muted-foreground">
                 <li>• FRED API Integration</li>
-                <li>• Live Market Data</li>
                 <li>• Historical Trends</li>
                 <li>• Interactive Charts</li>
               </ul>
