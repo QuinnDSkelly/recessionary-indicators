@@ -108,7 +108,7 @@ const LaggingIndicators = () => {
         {/* Comparison Note */}
         <div className="bg-muted/30 border border-border rounded-lg p-4">
           <p className="text-sm text-muted-foreground text-center">
-            💡 <strong>Note:</strong> Lagging indicators confirm trends that leading indicators have already predicted. 
+            <strong>Note:</strong> Lagging indicators confirm trends that leading indicators have already predicted. 
             Compare with <Link to="/leading" className="text-primary hover:underline">Leading Indicators</Link> for comprehensive analysis.
           </p>
         </div>
