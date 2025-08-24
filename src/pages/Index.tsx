@@ -103,10 +103,10 @@ const Index = () => {
 
           <IndicatorCard
             title="Money Supply (M2)"
-            value={`${data.moneySupply.indicator.value.toFixed(1)}%`}
+            value={`${data.moneySupply.indicator.change.toFixed(1)}%`}
             change={data.moneySupply.indicator.change}
             trend={data.moneySupply.indicator.trend}
-            subtitle="Year-over-Year Growth"
+            subtitle={`$${(data.moneySupply.indicator.value / 1000).toFixed(2)}T Total Supply`}
           >
             <MoneySupplyChart data={data.moneySupply.timeSeriesData} />
           </IndicatorCard>
