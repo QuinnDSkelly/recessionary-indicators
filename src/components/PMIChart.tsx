@@ -60,7 +60,6 @@ export const PMIChart = ({ data }: PMIChartProps) => {
             stroke="hsl(var(--warning))" 
             strokeDasharray="4 4" 
             strokeWidth={2}
-            label={{ value: "Expansion/Contraction", position: "insideTopRight", fontSize: 10 }}
           />
           <Bar 
             dataKey="value" 
