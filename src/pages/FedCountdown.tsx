@@ -8,7 +8,7 @@ const FedCountdown = () => {
       {/* Hero Section */}
       <div className="max-w-4xl mx-auto px-6 py-16 text-center space-y-8">
         <h1 className="text-5xl font-bold bg-gradient-to-r from-primary to-financial-blue bg-clip-text text-transparent">
-          Recession Indicators Dashboard
+          Recessionary Indicators Dashboard
         </h1>
         <p className="text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
           Monitor key economic indicators to track potential recession signals. 
